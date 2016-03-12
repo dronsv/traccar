@@ -24,7 +24,7 @@ public class H02ProtocolEncoder extends StringProtocolEncoder {
         // Temporary put default password
         command.set(Command.KEY_DEVICE_PASSWORD, "123456");
 //        String devID="000000000000000";
-        String devID="355488020137297";        
+        String devID="000000000000000";        
         SimpleDateFormat dateFormatUmc = new SimpleDateFormat("HHmmss");
         dateFormatUmc.setTimeZone(TimeZone.getTimeZone("UTC"));
         String time = dateFormatUmc.format(new Date());
@@ -55,7 +55,9 @@ public class H02ProtocolEncoder extends StringProtocolEncoder {
             case Command.TYPE_ALARM_ARM:
                 return formatCommand(command, "*HQ,%s,S6,%s,0,0#", devID, time);
             case Command.TYPE_ALARM_DISARM:
-                return formatCommand(command, "*HQ,%s,S6,%s,0,0#", devID, time);
+                return formatCommand(command, "*HQ,%s,S6,%s,1,1#", devID, time);
+                
+                
             case Command.TYPE_ALARM_DROP:
                 return formatCommand(command, "*HQ,%s,A1,%s#", devID, time);
             default:

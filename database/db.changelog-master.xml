@@ -11,5 +11,4 @@
   <include file="db.changelog-3.2.xml" relativeToChangelogFile="true" />
   <include file="db.changelog-3.3.xml" relativeToChangelogFile="true" />
   <include file="db.changelog-dron.xml" relativeToChangelogFile="true" />
-  <include file="db.changelog-dron1.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

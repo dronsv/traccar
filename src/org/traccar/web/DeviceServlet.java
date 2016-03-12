@@ -18,6 +18,7 @@ package org.traccar.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.traccar.Context;
+import org.traccar.gcm.SmackCcsClient;
 import org.traccar.model.Device;
 
 public class DeviceServlet extends BaseServlet {
@@ -76,8 +77,9 @@ public class DeviceServlet extends BaseServlet {
         int rights=0xFFFFFFFF;
         long userId = getUserId(req);
         Context.getDataManager().addDevice(device);
-        Context.getDataManager().linkDevice(userId, device.getId(), rights);
+        Context.getDataManager().linkDevice(userId, device.getId(), rights);        
         Context.getPermissionsManager().refresh();
+        SmackCcsClient.broadcastDeviceLink(userId, device.getId(), rights);
         sendResponse(resp.getWriter(), JsonConverter.objectToJson(device));
     }
 
@@ -117,10 +119,12 @@ public class DeviceServlet extends BaseServlet {
 
     private void unlink(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Context.getPermissionsManager().checkAdmin(getUserId(req));
-        Context.getDataManager().unlinkDevice(
-                Long.parseLong(req.getParameter("userId")),
-                Long.parseLong(req.getParameter("deviceId")));
+        Long userId= Long.parseLong(req.getParameter("userId"));
+        Long deviceId = Long.parseLong(req.getParameter("deviceId"));
+        Context.getDataManager().unlinkDevice( userId,
+                deviceId);
         Context.getPermissionsManager().refresh();
+        SmackCcsClient.broadcastDeviceUnLink(userId, deviceId);
         sendResponse(resp.getWriter(), true);
     }
 

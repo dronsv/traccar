@@ -38,6 +38,7 @@ import liquibase.resource.ResourceAccessor;
 import org.traccar.Config;
 import org.traccar.helper.Log;
 import org.traccar.model.Device;
+import org.traccar.model.GCMDevice;
 import org.traccar.model.MiscFormatter;
 import org.traccar.model.Permission;
 import org.traccar.model.Position;
@@ -289,6 +290,37 @@ public class DataManager implements IdentityManager {
                 .executeUpdate();
         AsyncServlet.sessionRefreshUser(userId);
     }
+    
+    
+    public void addGCMDevice(GCMDevice entity) throws SQLException {
+        QueryBuilder.create(dataSource, getQuery("database.addGCMDevice"))
+                .setObject(entity)
+                .executeUpdate();
+        AsyncServlet.sessionRefreshUser(entity.getUserId());
+    }
+
+    public void removeGCMDevice(long userId, String id) throws SQLException {
+        QueryBuilder.create(dataSource, getQuery("database.deleteGCMDevice"))
+                .setLong("userId", userId)
+                .setString("id", id)
+                .executeUpdate();
+        AsyncServlet.sessionRefreshUser(userId);
+    }
+    
+    public void updateGCMDevice(GCMDevice entity) throws SQLException {
+        QueryBuilder.create(dataSource, getQuery("database.updateGCMDevice"))
+                .setObject(entity)
+                .executeUpdate();        
+    }
+
+    
+    public Collection<GCMDevice> getUserGCMDeviceLinks(long userId, long deviceId) throws SQLException {
+        return QueryBuilder.create(dataSource, getQuery("database.getDeviceLinks"))
+                .setLong("userId", userId)
+                .executeQuery(GCMDevice.class);
+    }
+    
+    
     public Collection<Position> getPositions(long deviceId, Date from, Date to) throws SQLException {
         return QueryBuilder.create(dataSource, getQuery("database.selectPositions"))
                 .setLong("deviceId", deviceId)
@@ -334,7 +366,13 @@ public class DataManager implements IdentityManager {
     public void updateServer(Server server) throws SQLException {
         QueryBuilder.create(dataSource, getQuery("database.updateServer"))
                 .setObject(server)
-                .executeUpdate();
+                .executeQuery(GCMDevice.class);
+    }
+
+    public Collection<GCMDevice> getGcmDeviceByUuid(String uuid) throws SQLException {
+           return QueryBuilder.create(dataSource, getQuery("database.selectGCMDeviceByUuid"))
+                .setString("uuid", uuid)
+                .executeQuery(GCMDevice.class);
     }
 
 }

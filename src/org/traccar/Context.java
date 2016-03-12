@@ -20,6 +20,7 @@ import org.traccar.database.ConnectionManager;
 import org.traccar.database.DataManager;
 import org.traccar.database.IdentityManager;
 import org.traccar.database.PermissionsManager;
+import org.traccar.gcm.SmackCcsClient;
 import org.traccar.geocode.BingMapsReverseGeocoder;
 import org.traccar.geocode.FactualReverseGeocoder;
 import org.traccar.geocode.GisgraphyReverseGeocoder;
@@ -178,6 +179,10 @@ public final class Context {
         connectionManager = new ConnectionManager(dataManager);
 
         serverManager = new ServerManager();
+        
+        if (config.getBoolean("gcm.enable")){
+            SmackCcsClient.sendMessage("/topics/global", "Server started");
+        }
     }
 
     public static void init(IdentityManager testIdentityManager) {

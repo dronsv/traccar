@@ -8,8 +8,15 @@
 
     <entry key='web.keystorePath'>/home/andrey/projects/NetBeansProjects/ssl/tc</entry>
     <entry key='web.keystoreFile'>keystore.jks</entry>
-    <entry key='web.keystorePassword'>passwor</entry>
+    <entry key='web.keystorePassword'>password</entry>
     <entry key='web.aliasPassword'>ajhtdf!</entry>
+    <entry key='web.httpsPort'>8443</entry>
+    
+    <entry key='gcm.enable'>true</entry>
+    <entry key="gcm.apiKey">AIzaSyC3664RwCOaBtGvbJ19omlGf8giNgz2TWo</entry>
+    <entry key="gcm.login">512108084084@gcm.googleapis.com</entry>
+    <entry key="gcm.projectId">512108084084</entry>
+    
     
     <entry key='web.enable'>true</entry>
     <!--<entry key='web.address'></entry>-->
@@ -156,7 +163,31 @@
     <entry key='database.getDeviceLinks'>
         SELECT * FROM users u INNER JOIN user_device ud ON u.id = ud.userID WHERE ud.deviceID = :deviceId;
     </entry>
+    
+    <entry key='database.addGCMDevice'>
+        INSERT INTO gcm_device (userId, token, name, uuid) VALUES (:userId, :token, :name, :uuid);
+    </entry>
 
+    <entry key='database.updateGCMDevice'>
+        UPDATE gcm_device SET
+            token = :token
+            name = :name
+            userId = :userId            
+        WHERE uuid = :uuid;
+    </entry>
+
+    <entry key='database.deleteGCMDevice'>
+        DELETE FROM gcm_device WHERE userId = :userId AND id = :id;
+    </entry>
+
+    <entry key='database.getUserGCMDeviceLinks'>
+        SELECT * FROM  gcm_device gd WHERE gd.userID = :userId;
+    </entry>
+    
+    <entry key='database.selectGCMDeviceByUuid'>
+        SELECT * FROM  gcm_device gd WHERE gd.uuid = :uuid;
+    </entry>
+    
     <entry key='database.selectPositions'>
         SELECT * FROM positions WHERE deviceId = :deviceId AND fixTime BETWEEN :from AND :to ORDER BY fixTime;
     </entry>

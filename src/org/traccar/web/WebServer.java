@@ -52,6 +52,7 @@ import org.traccar.api.ResourceErrorHandler;
 import org.traccar.api.SecurityRequestFilter;
 import org.traccar.api.resource.CommandResource;
 import org.traccar.api.resource.DeviceResource;
+import org.traccar.api.resource.GCMDeviceResource;
 import org.traccar.api.resource.PermissionResource;
 import org.traccar.api.resource.PositionResource;
 import org.traccar.api.resource.ServerResource;
@@ -114,7 +115,7 @@ public class WebServer {
             https = new ServerConnector(server,
                     new SslConnectionFactory(sslContextFactory,HttpVersion.HTTP_1_1.toString()),
                     new HttpConnectionFactory(https_config));
-            https.setPort(8443);
+            https.setPort(config.getInteger("web.httpsPort", 8443));
             https.setIdleTimeout(500000);
 
             // Here you see the server having multiple connectors registered with
@@ -202,7 +203,7 @@ public class WebServer {
         resourceConfig.register(ResourceErrorHandler.class);
         resourceConfig.register(SecurityRequestFilter.class);
         resourceConfig.register(CorsResponseFilter.class);
-        resourceConfig.registerClasses(ServerResource.class, SessionResource.class, CommandResource.class,
+        resourceConfig.registerClasses(ServerResource.class, GCMDeviceResource.class, SessionResource.class, CommandResource.class,
                 PermissionResource.class, DeviceResource.class, UserResource.class, PositionResource.class);
         servletHandler.addServlet(new ServletHolder(new ServletContainer(resourceConfig)), "/*");
 
@@ -218,6 +219,7 @@ public class WebServer {
         servletHandler.addServlet(new ServletHolder(new DeviceServlet()), "/device/*");
         servletHandler.addServlet(new ServletHolder(new PositionServlet()), "/position/*");
         servletHandler.addServlet(new ServletHolder(new CommandServlet()), "/command/*");
+        servletHandler.addServlet(new ServletHolder(new GCMServlet()), "/gcm/*");
         servletHandler.addServlet(new ServletHolder(new MainServlet()), "/*");
         handlers.addHandler(servletHandler);
     }

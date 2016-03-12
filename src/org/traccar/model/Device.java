@@ -16,6 +16,7 @@
 package org.traccar.model;
 
 import java.util.Date;
+import org.json.simple.JSONObject;
 
 public class Device {
 
@@ -120,6 +121,23 @@ public class Device {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin(Long userID) {
+        return true;
+    }
+    
+    public JSONObject getJsonObject(Long userID){
+        JSONObject deviceJson = new JSONObject();
+        deviceJson.put("uniqueId", getUniqueId());
+        deviceJson.put("name", getName());
+        deviceJson.put("id", getId());
+        if (isAdmin(userID)){
+            deviceJson.put("apn", getApn());
+            deviceJson.put("phone", getPhone());
+            deviceJson.put("password", getPassword());
+        }                        
+        return deviceJson;
     }
     
 

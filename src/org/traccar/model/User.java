@@ -15,6 +15,11 @@
  */
 package org.traccar.model;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONObject;
+import org.traccar.Context;
 import org.traccar.helper.Hashing;
 import org.traccar.web.JsonIgnore;
 
@@ -153,6 +158,22 @@ public class User {
             hashedPassword = hashingResult.getHash();
             salt = hashingResult.getSalt();
         }
+    }
+    
+    public JSONObject getJsonObject(Long userID){
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("name", name);
+        jsonObj.put("admin", admin);
+        try {
+            if (Context.getDataManager().getUser(userID).getAdmin()){
+                jsonObj.put("email", email);                        
+                return jsonObj;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jsonObj;
     }
 
     private String hashedPassword;

@@ -16,6 +16,7 @@
 package org.traccar.model;
 
 import java.util.Date;
+import org.json.simple.JSONObject;
 
 public class Position extends Event {
 
@@ -29,6 +30,15 @@ public class Position extends Event {
         }
     }
 
+    public JSONObject getJsonObject(){
+        JSONObject json = new JSONObject();
+        json.put("latitude", latitude);
+        json.put("longitude", longitude);
+        json.put("altitude", altitude);
+        json.put("speed", speed);
+        return json;
+    }
+    
     public void setFixTime(Date fixTime) {
         if (fixTime != null) {
             this.fixTime = new Date(fixTime.getTime());

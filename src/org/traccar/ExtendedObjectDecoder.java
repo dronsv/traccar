@@ -23,6 +23,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelUpstreamHandler;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
+import org.traccar.gcm.SmackCcsClient;
 
 public abstract class ExtendedObjectDecoder implements ChannelUpstreamHandler {
 
@@ -47,6 +48,7 @@ public abstract class ExtendedObjectDecoder implements ChannelUpstreamHandler {
                 }
             } else {
                 Channels.fireMessageReceived(ctx, decodedMessage, e.getRemoteAddress());
+//                SmackCcsClient.sendMessage(, "cgOCCv5AYNQ:APA91bH6DKnoRtALPCsnziU9iSdQpIOK3KvLf7b-Ngy9iwbT_5R-st1wOqv-BO8YWt4dJLbbxAv1yxuROsmilOkvW1UMctJx0mOLcvsbQk2S9iB-dozizSoRchzkSSkdd-xGEsbpY-b0", decodedMessage.toString());
             }
         }
     }

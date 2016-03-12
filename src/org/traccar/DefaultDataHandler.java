@@ -15,8 +15,11 @@
  */
 package org.traccar;
 
+import org.traccar.gcm.SmackCcsClient;
 import org.traccar.helper.Log;
 import org.traccar.model.Position;
+import org.traccar.web.JsonConverter;
+import static org.traccar.web.JsonConverter.objectToJson;
 
 public class DefaultDataHandler extends BaseDataHandler {
 
@@ -29,6 +32,7 @@ public class DefaultDataHandler extends BaseDataHandler {
             if (lastPosition == null || position.getFixTime().compareTo(lastPosition.getFixTime()) > 0) {
                 Context.getDataManager().updateLatestPosition(position);
             }
+            SmackCcsClient.broadcastPosition(position);
         } catch (Exception error) {
             Log.warning(error);
         }

@@ -7,7 +7,6 @@
 
     <changeSet author="author" id="changelog-3.3">
 
-
         <addColumn tableName="devices">
             <column name="phone" type="VARCHAR(128)"/>
         </addColumn>
@@ -16,7 +15,29 @@
         </addColumn>
         <addColumn tableName="devices">
             <column name="password" type="VARCHAR(128)"/>
+        </addColumn>        
+        <addColumn tableName="devices">
+            <column name="gcm_id" type="VARCHAR(128)"/>
         </addColumn>
-
+        
+        <addColumn tableName="user_device">
+            <column name="rights" type="INT"/>   
+        </addColumn>
+        
+        <createTable tableName="gcm_device">
+            <column name="uuid" type="VARCHAR(1024)">
+              <constraints primaryKey="true" />
+            </column>      
+            <column name="name" type="VARCHAR(1024)">        
+                <constraints nullable="false" />
+            </column>
+            <column name="userId" type="INT">
+              <constraints nullable="false" />
+            </column>
+            <column name="token" type="VARCHAR(1024)">
+              <constraints nullable="false" />
+            </column>      
+      </createTable> 
+      
     </changeSet>
 </databaseChangeLog>
